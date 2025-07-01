@@ -3,13 +3,16 @@ import torch.nn as nn
 import torch.nn.functional as F
 from model_data_loader import load_model_data
 
-class SWEM(nn.Module):
-    def __init__(self):
+class SWEMWithEmbeddings(nn.Module):
+    def __init__(self, vocab_size, embedding_size, hidden_dim, num_outputs):
         super().__init__()
-        self.fc1 = nn.Linear(300, 64)
-        self.fc2 = nn.Linear(64, 1)
+        self.embedding = nn.Embedding(vocab_size, embedding_size)
+        self.fc1 = nn.Linear(embedding_size, hidden_dim)
+        self.fc2 = nn.Linear(hidden_dim, num_outputs)
 
     def forward(self, x):
+        x = self.embedding(x)
+        x = torch.mean(x, dim=0)
         x = self.fc1(x)
         x = F.relu(x)
         x = self.fc2(x)
@@ -18,7 +21,12 @@ class SWEM(nn.Module):
 train_loader, test_loader = load_model_data()
 
 #training
-model = SWEM()#instantiate model
+model = SWEMWithEmbeddings(#instantiate model
+    vocab_size = 5000,
+    embedding_size = 300, 
+    hidden_dim = 64, 
+    num_outputs = 1,
+)
 
 #binary cross-entropy (BCE) loss and Adam optimizer
 criterion = nn.BCEWithLogitsLoss()
