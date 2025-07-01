@@ -8,10 +8,10 @@ from torchtext.vocab import build_vocab_from_iterator
 from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import DataLoader
 
-# 1. Tokenizer
+#tokenizer
 tokenizer = get_tokenizer('basic_english')
 
-# 2. Build vocab
+#build vocab
 def yield_tokens(data_iter):
     for label, text in data_iter:
         yield tokenizer(text)
@@ -20,18 +20,18 @@ train_iter = AG_NEWS(split='train')
 vocab = build_vocab_from_iterator(yield_tokens(train_iter), specials=["<pad>", "<unk>"])
 vocab.set_default_index(vocab["<unk>"])
 
-# 3. Recreate iterators
+#recreate iterators
 train_iter = list(AG_NEWS(split='train'))
 test_iter = list(AG_NEWS(split='test'))
 
-# 4. Collator
+#collator
 def collator(batch):
     labels = torch.tensor([label - 1 for (label, text) in batch], dtype=torch.long)
     token_ids = [torch.tensor(vocab(tokenizer(text)), dtype=torch.long) for (_, text) in batch]
     padded = pad_sequence(token_ids, batch_first=True, padding_value=vocab["<pad>"])
     return padded, labels
 
-# 5. Dataloaders
+#dataloaders
 BATCH_SIZE = 128
 train_loader = DataLoader(train_iter, batch_size=BATCH_SIZE, shuffle=True, collate_fn=collator)
 test_loader = DataLoader(test_iter, batch_size=BATCH_SIZE, shuffle=False, collate_fn=collator)
@@ -88,7 +88,7 @@ for epoch in range(NUM_EPOCHS):
         loss.backward()
         optimizer.step()
         
-        predictions = torch.argmax(y, dim=1)         # ✅
+        predictions = torch.argmax(y, dim=1)
         correct += torch.sum((predictions == labels).float())
         num_examples += len(inputs)
     
