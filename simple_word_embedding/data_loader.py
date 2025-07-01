@@ -3,7 +3,7 @@ from data_processing import load_ConceptNet, extract_embeddings, english_words, 
 def load_normalized_english_embeddings():
     load_ConceptNet()
     all_words, all_embeddings = extract_embeddings()
-    english_words, english_embeddings = english_words(all_words, all_embeddings)
-    normalized_embeddings = normalize_embeddings(english_embeddings)
-    index = create_word_dictionary(english_words)
-    return english_words, normalized_embeddings, index
+    eng_words, eng_embeddings = english_words(all_words, all_embeddings)
+    norm_embeddings = normalize_embeddings(eng_embeddings)
+    index = create_word_dictionary(eng_words)
+    return eng_words, norm_embeddings, index
