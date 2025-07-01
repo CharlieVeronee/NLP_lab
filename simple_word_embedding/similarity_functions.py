@@ -1,5 +1,5 @@
 import numpy as np
-from data_loader import load_normalized_english_embeddings
+from vector_data_loader import load_normalized_english_embeddings
 
 english_words, normalized_embeddings, index = load_normalized_english_embeddings()
 

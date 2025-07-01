@@ -1,4 +1,4 @@
-from data_processing import load_ConceptNet, extract_embeddings, english_words, normalize_embeddings, create_word_dictionary
+from vector_data_processing import load_ConceptNet, extract_embeddings, english_words, normalize_embeddings, create_word_dictionary
 
 def load_normalized_english_embeddings():
     load_ConceptNet()
